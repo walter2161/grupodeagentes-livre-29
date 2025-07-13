@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiService } from '@/services/apiService';
+import { useSupabaseAgents } from './useSupabaseAgents';
+import { useSupabaseGroups } from './useSupabaseGroups';
 
 export function useApiStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => Promise<void>, boolean] {
   const { user } = useAuth();
@@ -107,12 +109,15 @@ export function useUserProfile() {
   return useApiStorage('user-profile', defaultProfile);
 }
 
+// Substituído por hooks do Supabase - manter para compatibilidade
 export function useAgents() {
-  return useApiStorage('agents', []);
+  const { agents, isLoading } = useSupabaseAgents();
+  return [agents, async () => {}, isLoading];
 }
 
 export function useGroups() {
-  return useApiStorage('groups', []);
+  const { groups, isLoading } = useSupabaseGroups();
+  return [groups, async () => {}, isLoading];
 }
 
 export function useGuidelines() {

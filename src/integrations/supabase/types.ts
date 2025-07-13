@@ -14,7 +14,480 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agent_interactions: {
+        Row: {
+          agent_id: string
+          created_at: string
+          data: Json | null
+          id: string
+          interaction_type: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          data?: Json | null
+          id?: string
+          interaction_type: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          data?: Json | null
+          id?: string
+          interaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      agent_memory: {
+        Row: {
+          agent_id: string
+          conversation_history: Json | null
+          created_at: string
+          id: string
+          last_interaction: string | null
+          personal_notes: string | null
+          preferences: Json | null
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          conversation_history?: Json | null
+          created_at?: string
+          id?: string
+          last_interaction?: string | null
+          personal_notes?: string | null
+          preferences?: Json | null
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          conversation_history?: Json | null
+          created_at?: string
+          id?: string
+          last_interaction?: string | null
+          personal_notes?: string | null
+          preferences?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      agents: {
+        Row: {
+          agent_id: string
+          approach: string
+          avatar: string | null
+          color: string
+          created_at: string
+          description: string
+          documentation: string
+          experience: string
+          guidelines: string
+          icon: string
+          id: string
+          is_active: boolean | null
+          name: string
+          persona_style: string
+          specialty: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          approach: string
+          avatar?: string | null
+          color: string
+          created_at?: string
+          description: string
+          documentation: string
+          experience: string
+          guidelines: string
+          icon: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          persona_style: string
+          specialty: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          approach?: string
+          avatar?: string | null
+          color?: string
+          created_at?: string
+          description?: string
+          documentation?: string
+          experience?: string
+          guidelines?: string
+          icon?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          persona_style?: string
+          specialty?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          date_time: string
+          description: string | null
+          id: string
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          date_time: string
+          description?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          date_time?: string
+          description?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          agent_id: string
+          audio_url: string | null
+          content: string
+          created_at: string
+          id: string
+          message_id: string
+          sender: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          audio_url?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          message_id: string
+          sender: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          audio_url?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          message_id?: string
+          sender?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      consultation_protocols: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          description: string
+          id: string
+          steps: Json | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          steps?: Json | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          steps?: Json | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      daily_disclaimers: {
+        Row: {
+          acknowledged: boolean | null
+          created_at: string
+          date: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          created_at?: string
+          date: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          created_at?: string
+          date?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      group_messages: {
+        Row: {
+          agent_id: string | null
+          content: string
+          created_at: string
+          group_id: string
+          id: string
+          is_response: boolean | null
+          mentions: string[] | null
+          message_id: string
+          responding_to: string | null
+          sender: string
+          sender_avatar: string | null
+          sender_name: string | null
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          content: string
+          created_at?: string
+          group_id: string
+          id?: string
+          is_response?: boolean | null
+          mentions?: string[] | null
+          message_id: string
+          responding_to?: string | null
+          sender: string
+          sender_avatar?: string | null
+          sender_name?: string | null
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          content?: string
+          created_at?: string
+          group_id?: string
+          id?: string
+          is_response?: boolean | null
+          mentions?: string[] | null
+          message_id?: string
+          responding_to?: string | null
+          sender?: string
+          sender_avatar?: string | null
+          sender_name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      groups: {
+        Row: {
+          color: string
+          created_at: string
+          created_by: string | null
+          description: string
+          group_id: string
+          icon: string
+          id: string
+          is_default: boolean | null
+          members: string[]
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          group_id: string
+          icon: string
+          id?: string
+          is_default?: boolean | null
+          members: string[]
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          group_id?: string
+          icon?: string
+          id?: string
+          is_default?: boolean | null
+          members?: string[]
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      guidelines: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar: string | null
+          bio: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          preferences: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar?: string | null
+          bio?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          preferences?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          preferences?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      virtual_rooms: {
+        Row: {
+          agent_id: string
+          created_at: string
+          environment: string
+          id: string
+          last_activity: string | null
+          memories: Json | null
+          room_id: string
+          room_name: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          environment: string
+          id?: string
+          last_activity?: string | null
+          memories?: Json | null
+          room_id: string
+          room_name: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          environment?: string
+          id?: string
+          last_activity?: string | null
+          memories?: Json | null
+          room_id?: string
+          room_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
