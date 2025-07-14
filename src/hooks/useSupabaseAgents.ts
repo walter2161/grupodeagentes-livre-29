@@ -6,7 +6,7 @@ import { Agent, defaultAgents } from '@/types/agents';
 
 export const useSupabaseAgents = () => {
   const { user } = useSupabaseAuth();
-  const [agents, setAgents, isLoading, loadAgents] = useSupabaseData('agents', [], '*');
+  const [agents, setAgents, isLoading, loadAgents] = useSupabaseData<any[]>('agents', [], '*');
 
   // Função para converter dados do Supabase para o formato Agent
   const convertToAgent = (dbAgent: any): Agent => ({

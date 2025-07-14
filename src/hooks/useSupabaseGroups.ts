@@ -6,7 +6,7 @@ import { Group, defaultGroups } from '@/types/groups';
 
 export const useSupabaseGroups = () => {
   const { user } = useSupabaseAuth();
-  const [groups, setGroups, isLoading, loadGroups] = useSupabaseData('groups', [], '*');
+  const [groups, setGroups, isLoading, loadGroups] = useSupabaseData<any[]>('groups', [], '*');
 
   // Função para converter dados do Supabase para o formato Group
   const convertToGroup = (dbGroup: any): Group => ({
