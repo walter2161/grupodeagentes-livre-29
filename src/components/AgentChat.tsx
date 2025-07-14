@@ -8,7 +8,7 @@ import { agentService, MistralMessage } from '@/services/agentService';
 import { Agent } from '@/types/agents';
 import { ChatMessage } from '@/types/agents';
 import { UserProfile } from '@/types/user';
-import { useAgents, useUserProfile, useAgentInteractions } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { useChatStorage } from '@/hooks/useChatStorage';
 import { useAgentMemory } from '@/hooks/useAgentMemory';
 import { EmojiPicker } from '@/components/EmojiPicker';
@@ -43,7 +43,7 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   // Carrega as informações atualizadas do agente e do usuário da API
-  const [agents] = useAgents();
+  const { agents } = useSupabaseAgents();
   const [currentUserProfile] = useUserProfile();
   const currentAgent = agents.find(a => a.id === agent.id) || agent;
 

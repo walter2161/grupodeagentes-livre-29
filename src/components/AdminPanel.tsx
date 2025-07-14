@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Settings, User, MessageSquare, Download, BookOpen, Calendar, Trophy, Plus, Edit, Trash2, UserCog, RotateCcw, Bot } from 'lucide-react';
-import { useAgents, useUserProfile, useConsultationProtocols } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { useChatStorage } from '@/hooks/useChatStorage';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAgentPersistence } from '@/hooks/useAgentPersistence';
@@ -33,7 +33,7 @@ import { AIContentGenerator } from './AIContentGenerator';
 
 export const AdminPanel = () => {
   const { user } = useAuth();
-  const [agents, setAgents] = useAgents();
+  const { agents, saveAgent, deleteAgent, isLoading: agentsLoading } = useSupabaseAgents();
   const [userProfile, setUserProfile] = useUserProfile();
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [messages] = useChatStorage('all-messages');

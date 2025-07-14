@@ -8,7 +8,7 @@ import { AgentCard } from './AgentCard';
 import { AgentFilters } from './AgentFilters';
 import { AgentLimitDialog } from './AgentLimitDialog';
 import { Agent } from '@/types/agents';
-import { useAgents } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { useAgentPersistence } from '@/hooks/useAgentPersistence';
 import { defaultAgents } from '@/types/agents';
 import { checkUserLimits, DEFAULT_USER_LIMITS } from '@/types/userLimits';

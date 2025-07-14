@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PasswordInput } from '@/components/PasswordInput';
+import PasswordInput from '@/components/PasswordInput';
 import { useAuth } from '@/contexts/AuthContext';
 import { Mail, User, ExternalLink, RefreshCcw } from 'lucide-react';
 import { toast } from 'sonner';

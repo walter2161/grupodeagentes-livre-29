@@ -1,83 +1,106 @@
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface PasswordInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  label?: string;
-  placeholder?: string;
+  value?: string;
+  onChange?: (value: string) => void;
   disabled?: boolean;
+  label?: string;
 }
 
-export const PasswordInput: React.FC<PasswordInputProps> = ({
-  value,
+const PasswordInput: React.FC<PasswordInputProps> = ({
+  value = '',
   onChange,
-  label = "Senha",
-  placeholder = "Digite os números",
-  disabled = false
+  disabled = false,
+  label = 'Senha (6 dígitos)'
 }) => {
-  const [digits, setDigits] = useState<string[]>(value.split('').slice(0, 6));
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [digits, setDigits] = useState<string[]>(Array(6).fill(''));
+  const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
 
-  const handleDigitChange = (index: number, digit: string) => {
+  // Sincronizar com valor externo
+  useEffect(() => {
+    if (value && value.length <= 6) {
+      const newDigits = value.split('').concat(Array(6 - value.length).fill(''));
+      setDigits(newDigits.slice(0, 6));
+    }
+  }, [value]);
+
+  const handleInputChange = (index: number, newValue: string) => {
     // Permitir apenas números
-    const numericValue = digit.replace(/[^0-9]/g, '');
-    
-    if (numericValue.length <= 1) {
-      const newDigits = [...digits];
-      newDigits[index] = numericValue;
-      setDigits(newDigits);
-      onChange(newDigits.join(''));
+    if (newValue && !/^\d$/.test(newValue)) {
+      return;
+    }
 
-      // Mover para o próximo campo se um dígito foi inserido
-      if (numericValue && index < 5) {
-        inputRefs.current[index + 1]?.focus();
-      }
+    const newDigits = [...digits];
+    newDigits[index] = newValue;
+    setDigits(newDigits);
+
+    // Chamar onChange com o valor completo
+    const fullValue = newDigits.join('');
+    onChange?.(fullValue);
+
+    // Focar no próximo campo se um dígito foi inserido
+    if (newValue && index < 5) {
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Backspace: focar no campo anterior se o atual estiver vazio
     if (e.key === 'Backspace' && !digits[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+    
+    // Seta direita: próximo campo
+    if (e.key === 'ArrowRight' && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+    
+    // Seta esquerda: campo anterior
+    if (e.key === 'ArrowLeft' && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedText = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
-    const pastedDigits = pastedText.split('').slice(0, 6);
+    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
     
-    const newDigits = Array(6).fill('');
-    pastedDigits.forEach((digit, index) => {
-      newDigits[index] = digit;
-    });
-    
-    setDigits(newDigits);
-    onChange(newDigits.join(''));
+    if (pastedData) {
+      const newDigits = pastedData.split('').concat(Array(6 - pastedData.length).fill(''));
+      setDigits(newDigits.slice(0, 6));
+      onChange?.(pastedData);
+      
+      // Focar no próximo campo vazio ou no último
+      const nextEmptyIndex = Math.min(pastedData.length, 5);
+      inputRefs.current[nextEmptyIndex]?.focus();
+    }
   };
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-      <div className="flex space-x-1 sm:space-x-2" onPaste={handlePaste}>
-        {Array.from({ length: 6 }).map((_, index) => (
+      {label && <Label>{label}</Label>}
+      <div className="flex gap-2 justify-center">
+        {digits.map((digit, index) => (
           <Input
             key={index}
             ref={(el) => (inputRefs.current[index] = el)}
             type="text"
             inputMode="numeric"
             maxLength={1}
-            value={digits[index] || ''}
-            onChange={(e) => handleDigitChange(index, e.target.value)}
+            value={digit}
+            onChange={(e) => handleInputChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
+            onPaste={handlePaste}
             disabled={disabled}
-            className="w-8 h-8 sm:w-12 sm:h-12 text-center text-sm sm:text-lg font-semibold border-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            placeholder="•"
+            className="w-12 h-12 text-center text-lg font-bold border-2 focus:border-primary"
+            autoComplete="off"
           />
         ))}
       </div>
-      <p className="text-xs text-gray-500">Digite os 6 números da sua senha</p>
     </div>
   );
 };
+
+export default PasswordInput;
