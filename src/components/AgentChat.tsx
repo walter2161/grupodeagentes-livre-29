@@ -44,7 +44,6 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
   
   // Carrega as informações atualizadas do agente e do usuário da API
   const { agents } = useSupabaseAgents();
-  const [currentUserProfile] = useUserProfile();
   const currentAgent = agents.find(a => a.id === agent.id) || agent;
 
   const IconComponent = Icons[agent.icon as keyof typeof Icons] as React.ComponentType<any>;
@@ -74,14 +73,14 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
       console.log('Initializing welcome message for agent:', agent.id);
       const welcomeMessage: ChatMessage = {
         id: Date.now().toString(),
-        content: `Olá ${currentUserProfile.name}! 😊 Sou ${currentAgent.name}, ${currentAgent.title}. ${currentAgent.description}. Como posso te ajudar hoje?`,
+    content: `Olá ${userProfile.name}! 😊 Sou ${currentAgent.name}, ${currentAgent.title}. ${currentAgent.description}. Como posso te ajudar hoje?`,
         sender: 'agent',
         timestamp: new Date(),
         agentId: currentAgent.id
       };
       setMessages([welcomeMessage]);
     }
-  }, [agent.id, currentAgent.name, currentAgent.title, currentAgent.description, messages.length, setMessages, currentUserProfile.name]);
+  }, [agent.id, currentAgent.name, currentAgent.title, currentAgent.description, messages.length, setMessages, userProfile.name]);
 
   // Função para atualizar interação do agente
   const updateAgentInteraction = (agentId: string, timestamp: Date) => {
@@ -161,14 +160,14 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
       const agentContext = getContextForAgent();
       // Converter formato da API para UserProfile
       const userProfileForAgent = {
-        id: currentUserProfile.id,
-        name: currentUserProfile.name,
-        email: currentUserProfile.email,
-        avatar: currentUserProfile.avatar,
-        bio: currentUserProfile.bio,
-        preferences: currentUserProfile.preferences,
-        createdAt: currentUserProfile.created_at,
-        updatedAt: currentUserProfile.updated_at
+        id: userProfile.id,
+        name: userProfile.name,
+        email: userProfile.email,
+        avatar: userProfile.avatar,
+        bio: userProfile.bio,
+        preferences: userProfile.preferences,
+        createdAt: userProfile.createdAt,
+        updatedAt: userProfile.updatedAt
       };
       const response = await agentService.getAgentResponse(contextualInput, conversationHistory, currentAgent, userProfileForAgent, agentContext);
       
@@ -314,14 +313,14 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
         }));
 
       const userProfileForAgent = {
-        id: currentUserProfile.id,
-        name: currentUserProfile.name,
-        email: currentUserProfile.email,
-        avatar: currentUserProfile.avatar,
-        bio: currentUserProfile.bio,
-        preferences: currentUserProfile.preferences,
-        createdAt: currentUserProfile.created_at,
-        updatedAt: currentUserProfile.updated_at
+        id: userProfile.id,
+        name: userProfile.name,
+        email: userProfile.email,
+        avatar: userProfile.avatar,
+        bio: userProfile.bio,
+        preferences: userProfile.preferences,
+        createdAt: userProfile.createdAt,
+        updatedAt: userProfile.updatedAt
       };
       const response = await agentService.getAgentResponse(audioText, conversationHistory, currentAgent, userProfileForAgent);
       
@@ -362,7 +361,7 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
       setAudioBlob(null);
       setRecordingTime(0);
     }
-  }, [messages, agent.id, currentAgent, currentUserProfile, setMessages]);
+  }, [messages, agent.id, currentAgent, userProfile, setMessages]);
 
   // Simula conversão speech-to-text mais realista
   const convertSpeechToText = async (audioBase64: string): Promise<string> => {
@@ -468,14 +467,14 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
         : 'O usuário enviou uma imagem. Por favor, reconheça o envio e pergunte se ele gostaria de descrever a imagem ou se precisa de alguma análise específica.';
 
       const userProfileForAgent = {
-        id: currentUserProfile.id,
-        name: currentUserProfile.name,
-        email: currentUserProfile.email,
-        avatar: currentUserProfile.avatar,
-        bio: currentUserProfile.bio,
-        preferences: currentUserProfile.preferences,
-        createdAt: currentUserProfile.created_at,
-        updatedAt: currentUserProfile.updated_at
+        id: userProfile.id,
+        name: userProfile.name,
+        email: userProfile.email,
+        avatar: userProfile.avatar,
+        bio: userProfile.bio,
+        preferences: userProfile.preferences,
+        createdAt: userProfile.createdAt,
+        updatedAt: userProfile.updatedAt
       };
       const response = await agentService.getAgentResponse(prompt, conversationHistory, currentAgent, userProfileForAgent);
       
@@ -511,7 +510,7 @@ export const AgentChat: React.FC<AgentChatProps> = ({ agent, onBack, userProfile
       // Reinicia a conversa com mensagem de boas-vindas
       const welcomeMessage: ChatMessage = {
         id: Date.now().toString(),
-        content: `Olá ${currentUserProfile.name}! 😊 Sou ${currentAgent.name}, ${currentAgent.title}. ${currentAgent.description}. Como posso te ajudar hoje?`,
+        content: `Olá ${userProfile.name}! 😊 Sou ${currentAgent.name}, ${currentAgent.title}. ${currentAgent.description}. Como posso te ajudar hoje?`,
         sender: 'agent',
         timestamp: new Date(),
         agentId: currentAgent.id

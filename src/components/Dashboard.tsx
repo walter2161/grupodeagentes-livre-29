@@ -11,7 +11,8 @@ import {
   Activity,
   Calendar
 } from 'lucide-react';
-import { useAgents, useUserProfile } from '@/hooks/useApiStorage';
+import { useUserProfile } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { useChatStorage } from '@/hooks/useChatStorage';
 import { Agent, defaultAgents } from '@/types/agents';
 import { UserProfile, defaultUserProfile } from '@/types/user';
@@ -21,7 +22,7 @@ import { UserLimitsStatus } from './UserLimitsStatus';
 import defaultUserAvatar from '@/assets/default-user-avatar.png';
 
 export const Dashboard = () => {
-  const [agents] = useAgents();
+  const { agents } = useSupabaseAgents();
   const [userProfile] = useUserProfile();
   const [messages] = useChatStorage('all-messages');
 

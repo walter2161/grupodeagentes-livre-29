@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Settings, Save, RefreshCw, RotateCcw, Trash2 } from 'lucide-react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { useAgents } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { useAgentPersistence } from '@/hooks/useAgentPersistence';
 import { useToast } from '@/hooks/use-toast';
 import { Agent, defaultAgents } from '@/types/agents';
@@ -36,9 +36,9 @@ const defaultSettings: SystemSettings = {
 export const SystemSettings = () => {
   const [settings, setSettings] = useLocalStorage<SystemSettings>('system-settings', defaultSettings);
   const [tempSettings, setTempSettings] = useState<SystemSettings>(settings);
-  const [agents, setAgents] = useAgents();
+  const { agents } = useSupabaseAgents();
   const { toast } = useToast();
-  const { getBackupInfo, forceRestoreFromBackup } = useAgentPersistence(agents, setAgents);
+  const { getBackupInfo, forceRestoreFromBackup } = useAgentPersistence(agents, () => {});
 
   const handleSave = () => {
     setSettings(tempSettings);

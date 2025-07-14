@@ -9,7 +9,8 @@ import { groupService } from '@/services/groupService';
 import { Group, GroupMessage } from '@/types/groups';
 import { Agent, defaultAgents } from '@/types/agents';
 import { UserProfile } from '@/types/user';
-import { useAgents, useAgentInteractions } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
+import { useAgentInteractions } from '@/hooks/useApiStorage';
 import { useChatStorage } from '@/hooks/useChatStorage';
 import { EmojiPicker } from '@/components/EmojiPicker';
 import { AgentAvatar } from '@/components/AgentAvatar';
@@ -30,7 +31,7 @@ export const GroupChat: React.FC<GroupChatProps> = ({ group, onBack, userProfile
   const [isRecording, setIsRecording] = useState(false);
   const [agentInteractions, setAgentInteractions] = useAgentInteractions();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [agents] = useAgents();
+  const { agents } = useSupabaseAgents();
   
   const groupAgents = agents.filter(agent => group.members.includes(agent.id));
   const IconComponent = Icons[group.icon as keyof typeof Icons] as React.ComponentType<any>;

@@ -7,6 +7,7 @@ import { Settings, User, MessageSquare, Download, BookOpen, Calendar, Trophy, Pl
 import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { useChatStorage } from '@/hooks/useChatStorage';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUserProfile, useConsultationProtocols } from '@/hooks/useApiStorage';
 import { useAgentPersistence } from '@/hooks/useAgentPersistence';
 import { Message, ConsultationProtocol } from '@/types';
 import { Agent, defaultAgents } from '@/types/agents';
@@ -40,18 +41,20 @@ export const AdminPanel = () => {
   const [protocols, setProtocols] = useConsultationProtocols();
   
   // Hook para garantir persistência segura dos agentes
-  const { verifyAndRestoreAgents, getBackupInfo } = useAgentPersistence(agents, setAgents);
+  const { verifyAndRestoreAgents, getBackupInfo } = useAgentPersistence(agents, () => {});
   type TabType = 'dashboard' | 'profile' | 'change-password' | 'agents' | 'edit-agent' | 'guidelines' | 'persona' | 'docs' | 'history' | 'protocols' | 'settings' | 'integrations' | 'delete' | 'terms' | 'logout';
   const [activeTab, setActiveTab] = useState<TabType>('agents'); // Inicia na aba de agentes
 
-  const handleSaveAgent = () => {
+  const handleSaveAgent = async () => {
     if (!selectedAgent) return;
     
-    const updatedAgents = agents.map(agent => 
-      agent.id === selectedAgent.id ? selectedAgent : agent
-    );
-    setAgents(updatedAgents);
-    alert('Agente salvo com sucesso!');
+    try {
+      await saveAgent(selectedAgent);
+      alert('Agente salvo com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar agente:', error);
+      alert('Erro ao salvar agente');
+    }
   };
 
   const handleSaveUserProfile = (profile: UserProfile) => {
@@ -73,7 +76,7 @@ export const AdminPanel = () => {
     alert('Perfil salvo com sucesso!');
   };
 
-  const handleCreateAgent = () => {
+  const handleCreateAgent = async () => {
     const newAgent: Agent = {
       id: `agent-${Date.now()}`,
       name: 'Novo Agente',
@@ -91,17 +94,26 @@ export const AdminPanel = () => {
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
     };
     
-    setAgents([...agents, newAgent]);
-    setSelectedAgent(newAgent);
-    setActiveTab('edit-agent');
+    try {
+      await saveAgent(newAgent);
+      setSelectedAgent(newAgent);
+      setActiveTab('edit-agent');
+    } catch (error) {
+      console.error('Erro ao criar agente:', error);
+      alert('Erro ao criar agente');
+    }
   };
 
-  const handleDeleteAgent = (agentId: string) => {
+  const handleDeleteAgent = async (agentId: string) => {
     if (confirm('Tem certeza que deseja deletar este agente?')) {
-      const updatedAgents = agents.filter(agent => agent.id !== agentId);
-      setAgents(updatedAgents);
-      if (selectedAgent?.id === agentId) {
-        setSelectedAgent(null);
+      try {
+        await deleteAgent(agentId);
+        if (selectedAgent?.id === agentId) {
+          setSelectedAgent(null);
+        }
+      } catch (error) {
+        console.error('Erro ao deletar agente:', error);
+        alert('Erro ao deletar agente');
       }
     }
   };

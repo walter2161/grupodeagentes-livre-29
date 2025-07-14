@@ -3,12 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Users, MessageSquare, Clock, Zap } from 'lucide-react';
-import { useAgents } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
 import { Agent, defaultAgents } from '@/types/agents';
 import { DEFAULT_USER_LIMITS } from '@/types/userLimits';
 
 export const UserLimitsStatus: React.FC = () => {
-  const [agents] = useAgents();
+  const { agents } = useSupabaseAgents();
   
   // Contabiliza apenas agentes criados pelo usuário
   const userCreatedAgents = agents.filter(agent => 

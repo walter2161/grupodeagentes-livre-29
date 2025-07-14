@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Group, defaultGroups } from '@/types/groups';
 import { Agent, defaultAgents } from '@/types/agents';
-import { useAgents, useGroups } from '@/hooks/useApiStorage';
+import { useSupabaseAgents } from '@/hooks/useSupabaseAgents';
+import { useSupabaseGroups } from '@/hooks/useSupabaseGroups';
 import { GroupCreator } from './GroupCreator';
 import { AgentAvatar } from './AgentAvatar';
 import * as Icons from 'lucide-react';
@@ -15,14 +16,18 @@ interface GroupPortalProps {
 }
 
 export const GroupPortal: React.FC<GroupPortalProps> = ({ onGroupSelect }) => {
-  const [groups, setGroups] = useGroups();
-  const [agents] = useAgents();
+  const { groups, saveGroup, deleteGroup } = useSupabaseGroups();
+  const { agents } = useSupabaseAgents();
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [editingGroup, setEditingGroup] = useState<Group | null>(null);
 
-  const handleCreateGroup = (group: Group) => {
-    setGroups([...groups, group]);
-    setShowCreateGroup(false);
+  const handleCreateGroup = async (group: Group) => {
+    try {
+      await saveGroup(group);
+      setShowCreateGroup(false);
+    } catch (error) {
+      console.error('Erro ao criar grupo:', error);
+    }
   };
 
   const handleEditGroup = (group: Group) => {
@@ -30,14 +35,22 @@ export const GroupPortal: React.FC<GroupPortalProps> = ({ onGroupSelect }) => {
     setShowCreateGroup(true);
   };
 
-  const handleUpdateGroup = (updatedGroup: Group) => {
-    setGroups(groups.map(g => g.id === updatedGroup.id ? updatedGroup : g));
-    setEditingGroup(null);
-    setShowCreateGroup(false);
+  const handleUpdateGroup = async (updatedGroup: Group) => {
+    try {
+      await saveGroup(updatedGroup);
+      setEditingGroup(null);
+      setShowCreateGroup(false);
+    } catch (error) {
+      console.error('Erro ao atualizar grupo:', error);
+    }
   };
 
-  const handleDeleteGroup = (groupId: string) => {
-    setGroups(groups.filter(g => g.id !== groupId));
+  const handleDeleteGroup = async (groupId: string) => {
+    try {
+      await deleteGroup(groupId);
+    } catch (error) {
+      console.error('Erro ao deletar grupo:', error);
+    }
   };
 
   const getGroupAgents = (memberIds: string[]): Agent[] => {

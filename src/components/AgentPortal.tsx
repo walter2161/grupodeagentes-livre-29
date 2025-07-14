@@ -19,14 +19,14 @@ interface AgentPortalProps {
 }
 
 export const AgentPortal: React.FC<AgentPortalProps> = ({ onAgentSelect, onCreateAgent }) => {
-  const [agents, setAgents, isLoading] = useAgents();
+  const { agents, isLoading } = useSupabaseAgents();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('all');
   const [selectedExperience, setSelectedExperience] = useState('all');
   const [showLimitDialog, setShowLimitDialog] = useState(false);
   
   // Hook para garantir persistência segura dos agentes
-  const { verifyAndRestoreAgents } = useAgentPersistence(agents, setAgents);
+  const { verifyAndRestoreAgents } = useAgentPersistence(agents, () => {});
   
   // Contabiliza apenas agentes criados pelo usuário (não os padrão)
   const userCreatedAgents = agents.filter(agent => !defaultAgents.some(defaultAgent => defaultAgent.id === agent.id));
@@ -43,9 +43,9 @@ export const AgentPortal: React.FC<AgentPortalProps> = ({ onAgentSelect, onCreat
   // Assegura que os agentes padrão sejam carregados se não houver dados salvos
   useEffect(() => {
     if (!isLoading && agents.length === 0) {
-      setAgents(defaultAgents);
+      console.log('Nenhum agente encontrado, agentes padrão devem estar disponíveis');
     }
-  }, [agents.length, setAgents, isLoading]);
+  }, [agents.length, isLoading]);
 
   const filteredAgents = agents.filter(agent => {
     if (!agent.isActive) return false;

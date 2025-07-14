@@ -111,13 +111,21 @@ export function useUserProfile() {
 
 // Substituído por hooks do Supabase - manter para compatibilidade
 export function useAgents() {
-  const { agents, isLoading } = useSupabaseAgents();
-  return [agents, async () => {}, isLoading];
+  const { agents, saveAgent, deleteAgent, isLoading } = useSupabaseAgents();
+  const setAgents = async (newAgents: any[]) => {
+    // Esta função é mantida para compatibilidade mas não faz nada
+    console.warn('useAgents setAgents is deprecated, use useSupabaseAgents instead');
+  };
+  return [agents, setAgents, isLoading];
 }
 
 export function useGroups() {
-  const { groups, isLoading } = useSupabaseGroups();
-  return [groups, async () => {}, isLoading];
+  const { groups, saveGroup, deleteGroup, isLoading } = useSupabaseGroups();
+  const setGroups = async (newGroups: any[]) => {
+    // Esta função é mantida para compatibilidade mas não faz nada
+    console.warn('useGroups setGroups is deprecated, use useSupabaseGroups instead');
+  };
+  return [groups, setGroups, isLoading];
 }
 
 export function useGuidelines() {
